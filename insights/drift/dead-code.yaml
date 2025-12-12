@@ -1,0 +1,41 @@
+# Dead Code Detection
+# Surfaces: Callsites that exist in code but have no runtime activity
+
+id: dead-code
+version: "1.0"
+name: "Dead Code Detection"
+description: |
+  Detects inference callsites in your codebase that have never been
+  executed in production. These represent either dead code paths,
+  untested features, or configuration-disabled functionality.
+
+source:
+  url: null
+  title: "Static + Runtime Drift Analysis"
+
+category: drift
+severity: warning
+tags: ["dead-code", "drift", "unused", "cleanup"]
+
+match:
+  scope: joined
+  conditions:
+    - field: codeOnly.length
+      op: gt
+      value: 0
+
+output:
+  headline: "{{count}} callsites in code with no runtime events"
+  evidence: "{{locations}}"
+
+recommends:
+  - optimization: null
+    relevance: 1.0
+    reason: "Review and remove unused callsites, or add test coverage"
+
+defaults:
+  min_count: 1
+
+author: kalmantic
+created: "2024-12-13"
+updated: "2024-12-13"

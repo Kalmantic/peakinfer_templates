@@ -1,0 +1,44 @@
+# Cost Concentration Detection
+# Surfaces: Hidden cost hotspots in your inference landscape
+
+id: cost-concentration
+version: "1.0"
+name: "Cost Concentration Detection"
+description: |
+  Detects when a single callsite accounts for a disproportionate
+  share of total inference costs. This reveals optimization targets
+  with the highest ROI potential.
+
+source:
+  url: "https://www.kalmantic.com/posts/ai-document-processing-model-costs-infrastructure-problems"
+  title: "Why $30K Model Costs Hide $200K Infrastructure Problems"
+
+category: cost
+severity: warning
+tags: ["cost", "concentration", "optimization-target", "roi"]
+
+match:
+  scope: global
+  conditions:
+    - field: top_callsite_cost_percent
+      op: gt
+      value: 50
+
+output:
+  headline: "{{percent}}% of cost from one callsite"
+  evidence: "{{model}} at {{location}} dominates spend. High-ROI optimization target."
+
+recommends:
+  - optimization: smart-model-routing
+    relevance: 0.9
+    reason: "Route simpler requests to cheaper models"
+  - optimization: semantic-caching
+    relevance: 0.8
+    reason: "Cache responses to reduce call volume"
+
+defaults:
+  concentration_threshold: 50
+
+author: kalmantic
+created: "2024-12-13"
+updated: "2024-12-13"

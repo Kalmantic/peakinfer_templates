@@ -1,0 +1,44 @@
+# Streaming Drift Detection
+# Surfaces: "Your streaming is fake"
+
+id: streaming-drift
+version: "1.0"
+name: "Streaming Drift Detection"
+description: |
+  Detects when code declares streaming (stream=True) but runtime
+  behavior shows non-streaming patterns. This indicates broken
+  streaming implementation or middleware that buffers responses.
+
+source:
+  url: null
+  title: "Code ↔ Runtime Pattern Analysis"
+
+category: drift
+severity: warning
+tags: ["streaming", "drift", "latency", "ux"]
+
+match:
+  scope: callsite
+  conditions:
+    - field: patterns.streaming
+      op: eq
+      value: true
+    - field: usage.latency_p50
+      op: gt
+      value: 2000
+
+output:
+  headline: "Streaming declared but p50 latency is {{p50}}ms"
+  evidence: "{{location}}: Code says stream=True but response times suggest buffering. Check middleware and client handling."
+
+recommends:
+  - optimization: null
+    relevance: 1.0
+    reason: "Verify streaming is working end-to-end: server → middleware → client"
+
+defaults:
+  streaming_latency_threshold: 2000
+
+author: kalmantic
+created: "2024-12-13"
+updated: "2024-12-13"

@@ -1,0 +1,43 @@
+# Token Underutilization Detection
+# Surfaces: "Why Max Tokens Defaults Are Draining Your Budget"
+
+id: token-underutilization
+version: "1.0"
+name: "Token Budget Underutilization"
+description: |
+  Detects callsites with consistently low output token counts,
+  suggesting max_tokens may be set too high. Over-allocation
+  can impact latency and batching efficiency.
+
+source:
+  url: "https://www.kalmantic.com/posts/why-max-tokens-defaults-draining-budget"
+  title: "Why Max Tokens Defaults Are Draining Your Budget"
+
+category: waste
+severity: info
+tags: ["tokens", "max-tokens", "configuration", "optimization"]
+
+match:
+  scope: callsite
+  conditions:
+    - field: usage.tokens_out
+      op: exists
+    - field: avg_tokens
+      op: lt
+      value: 200
+
+output:
+  headline: "Low output utilization at {{location}}"
+  evidence: "Averaging {{avg_tokens}} output tokens. Review max_tokens setting to match actual usage patterns."
+
+recommends:
+  - optimization: null
+    relevance: 1.0
+    reason: "Set max_tokens based on actual p95 output length, not defaults"
+
+defaults:
+  low_output_threshold: 200
+
+author: kalmantic
+created: "2024-12-13"
+updated: "2024-12-13"

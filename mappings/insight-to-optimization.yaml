@@ -1,0 +1,78 @@
+# Insight → Optimization Mappings
+# Links detected problems to their solutions
+#
+# Usage (future):
+#   peakinfer .              → Detects "prompt-bloat"
+#   peakinfer recommend      → Suggests "context-window-optimization"
+
+version: "1.0"
+updated: "2024-12-13"
+
+mappings:
+  # Cost insights
+  prompt-bloat:
+    primary: context-window-optimization
+    alternatives:
+      - semantic-caching
+    action: "Reduce input tokens via summarization or dynamic context injection"
+
+  retry-explosion:
+    primary: null
+    alternatives: []
+    action: "Implement exponential backoff with jitter"
+
+  cost-concentration:
+    primary: smart-model-routing
+    alternatives:
+      - semantic-caching
+    action: "Optimize the dominant callsite or route to cheaper models"
+
+  overpowered-extraction:
+    primary: smart-model-routing
+    alternatives: []
+    action: "Route extraction tasks to gpt-4o-mini or claude-3-haiku"
+
+  # Drift insights
+  dead-code:
+    primary: null
+    alternatives: []
+    action: "Remove unused callsites or add test coverage"
+
+  streaming-drift:
+    primary: null
+    alternatives: []
+    action: "Verify streaming works end-to-end: server → middleware → client"
+
+  untested-fallback:
+    primary: null
+    alternatives: []
+    action: "Implement chaos testing to verify fallback paths"
+
+  # Performance insights
+  throughput-gap:
+    primary: vllm-high-throughput-optimization
+    alternatives:
+      - gptq-4bit-quantization
+    action: "Implement continuous batching and optimize concurrency"
+
+  latency-explainer:
+    primary: null
+    alternatives: []
+    action: "Enable streaming for better perceived latency"
+
+  context-accumulation:
+    primary: context-window-optimization
+    alternatives:
+      - semantic-caching
+    action: "Implement sliding window or conversation summarization"
+
+  # Waste insights
+  overpowered-model:
+    primary: smart-model-routing
+    alternatives: []
+    action: "Test with cheaper models and implement task-based routing"
+
+  token-underutilization:
+    primary: null
+    alternatives: []
+    action: "Set max_tokens based on actual p95 output length"

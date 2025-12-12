@@ -1,0 +1,46 @@
+# Retry Explosion Detection
+# Surfaces: "How Bad Error Handling Turns $10 Failures into $1000 Bills"
+
+id: retry-explosion
+version: "1.0"
+name: "Retry Storm Detection"
+description: |
+  Detects potential retry storms where error handling amplifies costs
+  through aggressive retry logic without exponential backoff.
+  A single failure can cascade into hundreds of retries.
+
+source:
+  url: "https://www.kalmantic.com/posts/ai-retry-logic-error-handling-multiplies-costs"
+  title: "How Bad Error Handling Turns $10 Failures into $1000 Bills"
+
+category: cost
+severity: critical
+tags: ["retry", "error-handling", "reliability", "backoff"]
+
+match:
+  scope: callsite
+  conditions:
+    - field: usage.calls
+      op: gt
+      value: 10
+    - field: usage.latency_p99
+      op: ratio_gt
+      compare_to: usage.latency_p50
+      value: 5
+
+output:
+  headline: "Possible retry storm at {{location}}"
+  evidence: "{{calls}} calls with p99/p50 latency ratio of {{ratio}}x. Check retry logic and add exponential backoff."
+
+recommends:
+  - optimization: null
+    relevance: 1.0
+    reason: "Implement exponential backoff with jitter: base_delay * (2^attempt) + random_jitter"
+
+defaults:
+  min_calls: 10
+  latency_ratio_threshold: 5
+
+author: kalmantic
+created: "2024-12-13"
+updated: "2024-12-13"

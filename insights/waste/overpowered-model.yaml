@@ -1,0 +1,44 @@
+# Overpowered Model Detection
+# Surfaces: Premium models for tasks that don't need them
+
+id: overpowered-model
+version: "1.0"
+name: "Overpowered Model Detection"
+description: |
+  Detects when expensive frontier models are used for tasks with
+  consistently short outputs, suggesting the task may not require
+  advanced reasoning capabilities.
+
+source:
+  url: "https://www.kalmantic.com/posts/gpt5-model-selection-economics-extraction-tasks"
+  title: "Why Premium Models Waste Money on Extraction Tasks"
+
+category: waste
+severity: info
+tags: ["model-selection", "cost", "optimization"]
+
+match:
+  scope: callsite
+  conditions:
+    - field: model
+      op: in
+      value: ["gpt-4o", "gpt-4", "claude-3-opus"]
+    - field: avg_tokens
+      op: lt
+      value: 50
+
+output:
+  headline: "{{model}} generating only {{avg_tokens}} tokens average"
+  evidence: "{{location}}: Short outputs suggest this task may work with cheaper models. Test with gpt-4o-mini."
+
+recommends:
+  - optimization: smart-model-routing
+    relevance: 0.9
+    reason: "Implement task-based routing to cost-appropriate models"
+
+defaults:
+  short_output_threshold: 50
+
+author: kalmantic
+created: "2024-12-13"
+updated: "2024-12-13"

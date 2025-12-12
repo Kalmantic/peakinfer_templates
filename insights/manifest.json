@@ -1,0 +1,56 @@
+{
+  "version": "1.0.0",
+  "updated": "2024-12-13",
+  "description": "PeakInfer Insight Templates - Detection patterns for inference issues",
+  "repository": "https://github.com/Kalmantic/peakinfer_templates",
+  "schema": "../schema/insight.schema.json",
+  "categories": {
+    "cost": {
+      "description": "Cost-related issues and optimization opportunities",
+      "templates": [
+        "cost/prompt-bloat.yaml",
+        "cost/retry-explosion.yaml",
+        "cost/cost-concentration.yaml",
+        "cost/overpowered-extraction.yaml"
+      ]
+    },
+    "drift": {
+      "description": "Code ↔ Runtime mismatches and dead code",
+      "templates": [
+        "drift/dead-code.yaml",
+        "drift/streaming-drift.yaml",
+        "drift/untested-fallback.yaml"
+      ]
+    },
+    "performance": {
+      "description": "Speed, throughput, and latency issues",
+      "templates": [
+        "performance/throughput-gap.yaml",
+        "performance/latency-explainer.yaml",
+        "performance/context-accumulation.yaml"
+      ]
+    },
+    "waste": {
+      "description": "Resource underutilization and inefficiency",
+      "templates": [
+        "waste/overpowered-model.yaml",
+        "waste/token-underutilization.yaml"
+      ]
+    }
+  },
+  "templates": [
+    "cost/prompt-bloat.yaml",
+    "cost/retry-explosion.yaml",
+    "cost/cost-concentration.yaml",
+    "cost/overpowered-extraction.yaml",
+    "drift/dead-code.yaml",
+    "drift/streaming-drift.yaml",
+    "drift/untested-fallback.yaml",
+    "performance/throughput-gap.yaml",
+    "performance/latency-explainer.yaml",
+    "performance/context-accumulation.yaml",
+    "waste/overpowered-model.yaml",
+    "waste/token-underutilization.yaml"
+  ],
+  "total": 12
+}

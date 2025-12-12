@@ -1,0 +1,45 @@
+# Prompt Bloat Detection
+# Surfaces: "Stop Paying 40x More for Redundant AI Instructions"
+
+id: prompt-bloat
+version: "1.0"
+name: "Prompt Bloat Detection"
+description: |
+  Detects when input tokens vastly exceed output tokens, indicating
+  bloated system prompts or excessive context being sent with each request.
+  This is often caused by static system prompts repeated on every call.
+
+source:
+  url: "https://www.kalmantic.com/posts/system-prompt-optimization-stop-paying-redundant-instructions"
+  title: "Stop Paying 40x More for Redundant AI Instructions"
+
+category: cost
+severity: warning
+tags: ["tokens", "prompt", "system-prompt", "input-output-ratio"]
+
+match:
+  scope: callsite
+  conditions:
+    - field: usage.tokens_in
+      op: ratio_gt
+      compare_to: usage.tokens_out
+      value: 20
+
+output:
+  headline: "{{input_output_ratio}}x more input than output tokens"
+  evidence: "{{location}}: Sending {{tokens_in}} tokens, receiving {{tokens_out}}. Consider dynamic context injection."
+
+recommends:
+  - optimization: context-window-optimization
+    relevance: 0.9
+    reason: "Implement sliding window or summarization to reduce input tokens"
+  - optimization: semantic-caching
+    relevance: 0.7
+    reason: "Cache responses to avoid reprocessing similar prompts"
+
+defaults:
+  input_output_ratio_threshold: 20
+
+author: kalmantic
+created: "2024-12-13"
+updated: "2024-12-13"

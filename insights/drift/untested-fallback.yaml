@@ -1,0 +1,44 @@
+# Untested Fallback Detection
+# Surfaces: Fallback patterns that have never been exercised
+
+id: untested-fallback
+version: "1.0"
+name: "Untested Fallback Detection"
+description: |
+  Detects callsites with fallback patterns in code that have never
+  triggered in production. Untested fallbacks are dangerous - they
+  may fail when you need them most.
+
+source:
+  url: null
+  title: "Reliability Pattern Analysis"
+
+category: drift
+severity: info
+tags: ["fallback", "reliability", "testing", "resilience"]
+
+match:
+  scope: callsite
+  conditions:
+    - field: patterns.fallback
+      op: eq
+      value: true
+    - field: usage.calls
+      op: lt
+      value: 5
+
+output:
+  headline: "Fallback at {{location}} has rarely fired"
+  evidence: "Only {{calls}} calls recorded. Consider chaos testing to verify fallback behavior."
+
+recommends:
+  - optimization: null
+    relevance: 1.0
+    reason: "Implement chaos testing: intentionally trigger failures to verify fallback paths"
+
+defaults:
+  min_fallback_calls: 5
+
+author: kalmantic
+created: "2024-12-13"
+updated: "2024-12-13"

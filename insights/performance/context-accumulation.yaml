@@ -1,0 +1,44 @@
+# Context Accumulation Detection
+# Surfaces: "Why Context Windows Drain AI Budgets 10x Faster"
+
+id: context-accumulation
+version: "1.0"
+name: "Context Window Bloat Detection"
+description: |
+  Detects callsites with very high input token counts, indicating
+  full conversation history being sent with each request. This
+  pattern causes costs to grow quadratically with conversation length.
+
+source:
+  url: "https://www.kalmantic.com/posts/conversation-history-costs-context-windows-drain-budgets"
+  title: "Why Context Windows Drain AI Budgets 10x Faster"
+
+category: performance
+severity: warning
+tags: ["context", "tokens", "conversation", "memory"]
+
+match:
+  scope: callsite
+  conditions:
+    - field: usage.tokens_in
+      op: gt
+      value: 50000
+
+output:
+  headline: "High context usage at {{location}}"
+  evidence: "Averaging {{avg_tokens_in}} input tokens per call. Consider sliding window or summarization."
+
+recommends:
+  - optimization: context-window-optimization
+    relevance: 0.95
+    reason: "Implement sliding window to cap conversation history"
+  - optimization: semantic-caching
+    relevance: 0.6
+    reason: "Cache summaries of long conversations"
+
+defaults:
+  high_context_threshold: 50000
+
+author: kalmantic
+created: "2024-12-13"
+updated: "2024-12-13"

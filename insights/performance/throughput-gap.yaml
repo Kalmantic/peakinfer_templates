@@ -1,0 +1,45 @@
+# Throughput Gap Detection
+# Surfaces: Running below achievable performance
+
+id: throughput-gap
+version: "1.0"
+name: "Throughput Gap Detection"
+description: |
+  Compares your actual throughput against InferenceMAX benchmarks
+  to reveal how much performance you're leaving on the table.
+  Uses reference data from SemiAnalysis and provider benchmarks.
+
+source:
+  url: "https://www.semianalysis.com/p/inferencemax"
+  title: "InferenceMAX by SemiAnalysis"
+
+category: performance
+severity: warning
+tags: ["throughput", "performance", "benchmark", "optimization"]
+
+match:
+  scope: envelope
+  conditions:
+    - field: actual_tps
+      op: ratio_lt
+      compare_to: envelope.tps_median
+      value: 0.5
+
+output:
+  headline: "Running at {{percent}}% of achievable throughput"
+  evidence: "Your {{model}}: {{actual}} tok/s, reference: {{reference}} tok/s median. Check batching and concurrency settings."
+
+recommends:
+  - optimization: vllm-high-throughput-optimization
+    relevance: 0.9
+    reason: "Implement continuous batching for higher throughput"
+  - optimization: gptq-4bit-quantization
+    relevance: 0.7
+    reason: "Quantization can increase throughput by reducing memory pressure"
+
+defaults:
+  gap_threshold: 0.5
+
+author: kalmantic
+created: "2024-12-13"
+updated: "2024-12-13"

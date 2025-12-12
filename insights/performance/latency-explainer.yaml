@@ -1,0 +1,44 @@
+# Latency Explainer
+# Surfaces: High tail latency without streaming
+
+id: latency-explainer
+version: "1.0"
+name: "High Latency Without Streaming"
+description: |
+  Detects callsites with high p95 latency that aren't using streaming.
+  Streaming significantly improves perceived latency by delivering
+  tokens incrementally instead of waiting for complete responses.
+
+source:
+  url: null
+  title: "Latency Pattern Analysis"
+
+category: performance
+severity: warning
+tags: ["latency", "streaming", "ux", "perceived-performance"]
+
+match:
+  scope: callsite
+  conditions:
+    - field: patterns.streaming
+      op: neq
+      value: true
+    - field: usage.latency_p95
+      op: gt
+      value: 3000
+
+output:
+  headline: "p95 latency {{p95}}ms without streaming"
+  evidence: "{{location}}: Enable streaming to improve perceived latency. Users see tokens immediately instead of waiting."
+
+recommends:
+  - optimization: null
+    relevance: 1.0
+    reason: "Enable stream=True and implement incremental UI updates"
+
+defaults:
+  high_latency_threshold: 3000
+
+author: kalmantic
+created: "2024-12-13"
+updated: "2024-12-13"
