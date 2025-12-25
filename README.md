@@ -53,21 +53,27 @@ monitoring:
 ## Using Templates
 
 ```bash
-# List all available templates
-peakinfer templates list
+# List all available insight templates
+peakinfer template list
 
 # Get info on a specific template
-peakinfer templates info semantic-caching
+peakinfer template info streaming-drift
 
-# Apply a template during planning
-peakinfer plan --templates-dir ./templates
+# Calculate ROI for a template
+peakinfer template roi overpowered-model --monthly-cost 5000
+
+# List optimization templates (Inference Squeeze Guide)
+peakinfer template optimizations
+
+# Get info on an optimization template
+peakinfer template optimization semantic-caching
 ```
 
 ## Contributing
 
 1. Fork this repository
 2. Create your template in the appropriate category folder
-3. Validate with `peakinfer template-validate <template.yaml>`
+3. Ensure YAML follows the template schema (see existing templates for reference)
 4. Submit a pull request
 
 ## Categories
